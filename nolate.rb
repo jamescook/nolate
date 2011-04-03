@@ -32,12 +32,12 @@
 $nlt_templates = {}
 
 def nolate_empty_binding
-    return binding()
+    return binding
 end
 
 def nolate(str, sub = {})
     str.gsub(/<%([=#])(.*?)%>/) do
-        if $1 == "="
+        if $1 == '='
             eval $2, nolate_empty_binding, __FILE__, __LINE__
         else
             sub[$2.to_sym]
@@ -45,14 +45,14 @@ def nolate(str, sub = {})
     end
 end
 
-def nlt(viewname,sub={})
+def nlt(viewname, sub = {})
     viewname = viewname.to_s
     if !$nlt_templates[viewname]
-        filename = "views/"+viewname
+        filename = "views/#{viewname}"
         if !File.exists?(filename)
             raise "NOLATE error: no template at #{filename}"
         end
-        $nlt_templates[viewname] = File.open(filename).read
+        $nlt_templates[viewname] = File.read(filename)
     end
     nolate($nlt_templates[viewname],sub)
 end
